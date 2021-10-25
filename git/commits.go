@@ -25,10 +25,10 @@ func (r Repo) filterCommits(c CommitFilter) (o []string, err error) {
 		}
 	}
 	author := fmt.Sprintf("--author=%s", c.Author)
-	y, m, d := time.Now().AddDate(0, 0, c.Days).Date()
+	y, m, d := time.Now().AddDate(0, 0, c.Days*-1).Date()
 	since := fmt.Sprintf("--since=%d/%d/%d", d, m, y)
 
-	cmd := exec.Command("git", "-C", r.Path, "log", "-n", "3", author, "--pretty=format:%B", since, "--all")
+	cmd := exec.Command("git", "-C", r.Path, "log", "-n", "5", author, "--pretty=format:%B", since, "--all")
 	//fmt.Printf("Running: %s\n", cmd.String())
 
 	var outb, errb bytes.Buffer
@@ -36,7 +36,6 @@ func (r Repo) filterCommits(c CommitFilter) (o []string, err error) {
 	cmd.Stderr = &errb
 	err = cmd.Run()
 	if err != nil {
-		fmt.Printf("Failed to lookup repo %s\n", r.Path)
 		return o, err
 	}
 	if len(outb.Bytes()) == 0 {

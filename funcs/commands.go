@@ -18,7 +18,6 @@ func runner(c *cli.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to find abs path for %s", file)
 	}
-	fmt.Println(path)
 
 	w := walker.NewWalker(path)
 	contents, err := w.Walk()
@@ -27,11 +26,10 @@ func runner(c *cli.Context) error {
 	}
 
 	r := git.NewRepos(contents)
-	results, err := r.GetCommitsByAuthor(author, days)
-	if err != nil {
-		return err
+	results, _ := r.GetCommitsByAuthor(author, days)
+	if len(results) == 0 {
+		fmt.Printf("Found no commits in %s\n", path)
 	}
-
 	for _, r := range results {
 		fmt.Println(r)
 	}
