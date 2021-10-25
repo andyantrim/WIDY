@@ -25,17 +25,18 @@ func NewRepos(paths []string) Repos {
 	return r
 }
 
-func (r Repo) GetCommitsByAuthor(author string) ([]string, error) {
+func (r Repo) GetCommitsByAuthor(author string, days int) ([]string, error) {
 	f := CommitFilter{
 		Author: author,
+		Days: days,
 	}
 	return r.filterCommits(f)
 }
 
-func (r Repos) GetCommitsByAuthor(author string) (c []string, err error) {
+func (r Repos) GetCommitsByAuthor(author string, days int) (c []string, err error) {
 	var s []string
 	for _, r1 := range r {
-		s, err = r1.GetCommitsByAuthor(author)
+		s, err = r1.GetCommitsByAuthor(author, days)
 		if len(s) > 0 {
 			c = append(c, s...)
 		}

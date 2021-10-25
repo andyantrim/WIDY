@@ -10,18 +10,25 @@ import (
 
 type CommitFilter struct {
 	Author string
+	Days   int
 }
 
 func (r Repo) filterCommits(c CommitFilter) (o []string, err error) {
 	if r.Path == "" {
 		return o, err
 	}
-
+	now := time.Now()
+	if c.Days == 0 {
+		c.Days = 1
+		if now.Weekday() == time.Monday {
+			c.Days = 3
+		}
+	}
 	author := fmt.Sprintf("--author=%s", c.Author)
-	y, m, d := time.Now().AddDate(0, 0, -1).Date()
+	y, m, d := time.Now().AddDate(0, 0, c.Days).Date()
 	since := fmt.Sprintf("--since=%d/%d/%d", d, m, y)
 
-	cmd := exec.Command("git", "-C", r.Path, "log", "-n", "10", author, "--pretty=format:%B", since, "--all")
+	cmd := exec.Command("git", "-C", r.Path, "log", "-n", "3", author, "--pretty=format:%B", since, "--all")
 	//fmt.Printf("Running: %s\n", cmd.String())
 
 	var outb, errb bytes.Buffer

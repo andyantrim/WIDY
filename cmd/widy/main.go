@@ -4,27 +4,18 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/andyantrim/WIDY/git"
-	"github.com/andyantrim/WIDY/walker"
+	"github.com/andyantrim/WIDY/funcs"
+
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
-	w := walker.NewWalker("")
-	contents, err := w.Walk()
+	app := cli.NewApp()
+	funcs.BuildCLI(app)
+
+	err := app.Run(os.Args)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	r := git.NewRepos(contents)
-	results, err := r.GetCommitsByAuthor("andyantrim")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	for _, r := range results {
-		fmt.Println(r)
-	}
-
 }
