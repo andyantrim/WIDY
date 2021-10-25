@@ -14,7 +14,6 @@ func authorFlag(app *cli.App) {
 func daysFlag(app *cli.App) {
 	flag := &cli.IntFlag{
 		Name:  "days",
-		Value: 1,
 		Usage: "Specify how many days ago to start search from",
 	}
 	app.Flags = append(app.Flags, flag)
@@ -22,9 +21,9 @@ func daysFlag(app *cli.App) {
 
 func fileFlag(app *cli.App) {
 	flag := &cli.StringFlag{
-		Name:  "dir",
-		Value: "~/go/src/github/andyantrim",
-		Usage: "The base directory that contains the git repos to search",
+		Name:     "dir",
+		Usage:    "The base directory that contains the git repos to search",
+		Required: true,
 	}
 	app.Flags = append(app.Flags, flag)
 }
