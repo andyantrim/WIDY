@@ -1,6 +1,6 @@
 module github.com/andyantrim/WIDY
 
-go 1.16
+go 1.19
 
 require (
 	github.com/urfave/cli v1.22.5
